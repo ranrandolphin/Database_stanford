@@ -9,9 +9,20 @@
 -- so if (123, 456) is in the Likes table, there is no guarantee that (456, 123) is also present. 
 
 -- Q1. Find the names of all students who are friends with someone named Gabriel. 
-
+SELECT h.name
+FROM Highschooler h
+WHERE h.ID IN (SELECT ID2 FROM Friend JOIN Highschooler h2 ON h2.ID = Friend.ID1 
+               WHERE h2.name = 'Gabriel');
+               
 -- Q2. For every student who likes someone 2 or more grades younger than themselves, return that student's name and grade, 
 -- and the name and grade of the student they like. 
+
+SELECT h1.name, h1.grade, h2.name, h2.grade
+FROM Highschooler h1
+JOIN Likes l ON h1.ID = l.ID1
+JOIN Highschooler h2 ON h2.ID = l.ID2
+WHERE h1.grade - h2.grade >= 2;
+
 
 -- Q3. For every pair of students who both like each other, return the name and grade of both students. 
 -- Include each pair only once, with the two names in alphabetical order. 
