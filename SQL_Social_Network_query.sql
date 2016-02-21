@@ -34,6 +34,21 @@ WHERE h1.name < h2.name;
 
 -- Q4.Find all students who do not appear in the Likes table (as a student who likes or is liked) and return their names and grades. 
 -- Sort by grade, then by name within each grade. 
+SELECT t1.name, t1.grade
+FROM 
+(SELECT h1.ID, h1.name, h1.grade
+FROM Highschooler h1
+LEFT JOIN Likes l1 ON l1.ID1 = h1.ID
+WHERE l1.ID1 IS NULL
+AND l1.ID2 IS NULL) AS t1 -- select all students in highschooler do not appear in Likes' ID1
+LEFT JOIN Likes l2 ON t1.ID = l2.ID2
+WHERE l2.ID1 IS NULL
+AND l2.ID2 IS NULL;
+
+--Alternatively (simplify by LEFT JOIN using OR) --
+SELECT hs.name, hs.grade FROM Highschooler hs
+        LEFT JOIN Likes l1 ON l1.ID1=hs.ID OR l1.ID2=hs.ID
+        WHERE l1.ID1 IS NULL AND l1.ID2 IS NULL
 
 -- Q5. For every situation where student A likes student B, but we have no information about whom B likes 
 -- (that is, B does not appear as an ID1 in the Likes table), return A and B's names and grades. 
